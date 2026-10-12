@@ -29,5 +29,15 @@ namespace FootballLeagueTable.Tests
             Assert.Equal(2, m.HomeGoals);
             Assert.Equal(1, m.AwayGoals);
         }
+
+        [Fact]
+        public void Constructor_ThrowsOnNullTeamNames()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new MatchResult(null!, "Away", 1, 0));
+
+            Assert.Throws<ArgumentException>(
+                () => new MatchResult("Home", null!, 1, 0));
+        }
     }
 }
