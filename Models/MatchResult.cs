@@ -24,11 +24,18 @@ namespace FootballLeagueTable.Models
                 throw new ArgumentException("Away goals cannot be negative.", nameof(awayGoals));
             }
 
+            if (string.Equals(homeTeam, awayTeam, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("A team cannot play against itself.");
+            }
+
             HomeTeam = homeTeam.Trim();
             AwayTeam = awayTeam.Trim();
             HomeGoals = homeGoals;
             AwayGoals = awayGoals;
         }
+
+
 
         public string HomeTeam { get; }
         public string AwayTeam { get; }

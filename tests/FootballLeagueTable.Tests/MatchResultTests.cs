@@ -39,5 +39,12 @@ namespace FootballLeagueTable.Tests
             Assert.Throws<ArgumentException>(
                 () => new MatchResult("Home", null!, 1, 0));
         }
+
+        [Fact]
+        public void Constructor_ThrowsWhenTeamsAreTheSame()
+        {
+            Assert.Throws<ArgumentException>(
+                () => new MatchResult("Arsenal", "Arsenal", 1, 0));
+        }
     }
 }
