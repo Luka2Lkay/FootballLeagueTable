@@ -25,5 +25,18 @@ namespace FootballLeagueTable.Tests
             var e = new LeagueTableEntry { Team = "Z", Won = 3, Drawn = 2 };
             Assert.Equal(3 * 2 + 2, e.Points);
         }
+
+        [Fact]
+        public void GoalAverage_WhenBothGoalsAreZero_ReturnsZero()
+        {
+            var e = new LeagueTableEntry
+            {
+                Team = "X",
+                GoalsFor = 0,
+                GoalsAgainst = 0
+            };
+
+            Assert.Equal(0.0, e.GoalAverage);
+        }
     }
 }
