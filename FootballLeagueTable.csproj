@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <None Include=".github\COPILOT_INSTRUCTIONS.md" />
-    <None Include="tests\FootballLeagueTable.Tests\FootballLeagueTable.Tests.csproj" />
+    <None Include="FootballLeagueTable.Tests\FootballLeagueTable.Tests.csproj" />
   </ItemGroup>
 
 </Project>
