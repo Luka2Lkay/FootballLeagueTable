@@ -41,7 +41,7 @@ else
     lines = File.ReadAllLines(inputPath).Where(l => !string.IsNullOrWhiteSpace(l));
 }
 
-var parser = new CsvMatchParser();
+var parser = new InputParser();
 // CsvMatchParser.ParseFile accepts a path; create a small adapter to parse from lines
 IEnumerable<MatchResult> matchesFromLines(IEnumerable<string> inputLines)
 {
@@ -61,7 +61,7 @@ IEnumerable<MatchResult> matchesFromLines(IEnumerable<string> inputLines)
 }
 
 var matches = matchesFromLines(lines);
-var calculator = new LeagueCalculator(winPoints: 2, drawPoints: 1);
+var calculator = new TableCalculator(winPoints: 2, drawPoints: 1);
 var standings = calculator.CalculateStandings(matches);
 
 if (string.IsNullOrEmpty(outputPath) || outputPath == "-")

@@ -23,7 +23,7 @@ internal static class TestRunner
         try
         {
             File.WriteAllLines(temp, new[] { "Home,Away,2,1", "Arsenal,Liverpool,0,3" });
-            var parser = new CsvMatchParser();
+            var parser = new InputParser();
             var results = parser.ParseFile(temp).ToList();
             AssertEqual(2, results.Count, "Parser should read two rows");
             AssertEqual("Home", results[0].HomeTeam, "First row home team");
@@ -40,7 +40,7 @@ internal static class TestRunner
                 new MatchResult(null, "C", "A", 0, 3),
             };
 
-            var calc = new LeagueCalculator(2,1);
+            var calc = new TableCalculator(2,1);
             var standings = calc.CalculateStandings(matches);
             var a = standings.First(s => s.Team == "A");
             AssertEqual(2, a.Played, "Team A played");
@@ -58,7 +58,7 @@ internal static class TestRunner
                 new MatchResult(null, "A", "B", 1, 0),
                 new MatchResult(null, "C", "D", 2, 1),
             };
-            var calc = new LeagueCalculator(2,1);
+            var calc = new TableCalculator(2,1);
             var standings = calc.CalculateStandings(matches);
             // C has GAve 2.0, A has GAve = GF when GA==0 -> 1
             AssertEqual("C", standings[0].Team, "Goal average tie-breaker places C before A");
