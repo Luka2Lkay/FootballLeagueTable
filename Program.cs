@@ -1,89 +1,105 @@
 ﻿using System.Globalization;
-using FootballLeagueTable.Models;
 using FootballLeagueTable.Services;
+using FootballLeagueTable.Models;
 
-// CLI behaviour:
-// - No args: read stdin, write stdout
-// - One arg: input file (use stdout)
-// - Two args: input file and output file
 
-string? inputPath = null;
-string? outputPath = null;
+// Usage:
+// dotnet run -- [input.csv] [output.csv]
+// If input is omitted, read from stdin.
+// If output is omitted, write to stdout.
 
-if (args.Length == 0)
+if (args.Length > 2)
 {
-    // use stdin/stdout
-}
-else if (args.Length == 1)
-{
-    inputPath = args[0];
-}
-else
-{
-    inputPath = args[0];
-    outputPath = args[1];
+    Console.Error.WriteLine(
+        "Usage: FootballLeagueTable.Cli [input.csv] [output.csv]");
+    return 1;
 }
 
-IEnumerable<string> lines;
-if (string.IsNullOrEmpty(inputPath) || inputPath == "-")
+string? inputPath = args.Length > 0 ? args[0] : null;
+string? outputPath = args.Length > 1 ? args[1] : null;
+
+try
 {
-    // read from stdin
-    var stdin = Console.In.ReadToEnd();
-    lines = stdin.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-}
-else
-{
-    if (!File.Exists(inputPath))
+    string input;
+
+    if (!string.IsNullOrWhiteSpace(inputPath))
     {
-        Console.Error.WriteLine($"Input file not found: {inputPath}");
-        return 1;
-    }
-    lines = File.ReadAllLines(inputPath).Where(l => !string.IsNullOrWhiteSpace(l));
-}
+        if (!File.Exists(inputPath))
+        {
+            Console.Error.WriteLine($"Input file not found: {inputPath}");
+            return 1;
+        }
 
-var parser = new InputParser();
-// CsvMatchParser.ParseFile accepts a path; create a small adapter to parse from lines
-IEnumerable<MatchResult> matchesFromLines(IEnumerable<string> inputLines)
-{
-    // if the first line is a header, join and write to a temp file for reuse of parser
-    var arr = inputLines.ToArray();
-    // write to temp file and reuse parser to keep parsing consistent
-    var temp = Path.GetTempFileName();
-    File.WriteAllLines(temp, arr);
-    try
+        input = await File.ReadAllTextAsync(inputPath);
+    }
+    else
     {
-        return parser.ParseFile(temp).ToList();
+        using StreamReader reader = new StreamReader(Console.OpenStandardInput());
+        input = await reader.ReadToEndAsync();
     }
-    finally
+
+    InputParser parser = new InputParser();
+    IEnumerable<MatchResult> matches = parser.ParseMatches(input);
+
+    TableCalculator calculator = new TableCalculator();
+
+    List<LeagueTableEntry> table = calculator.CalculateTable(matches).ToList();
+
+    using StringWriter writer = new StringWriter(CultureInfo.InvariantCulture);
+
+    writer.WriteLine(
+        "Position,Team,Played,Won,Drawn,Lost,GoalsFor,GoalsAgainst,GoalAverage,Points");
+
+    for (int i = 0; i < table.Count(); i++)
     {
-        File.Delete(temp);
+        LeagueTableEntry entry = table[i];
+
+        writer.WriteLine(
+            $"{i + 1}," +
+            $"{EscapeCsv(entry.Team)}," +
+            $"{entry.Played.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.Won.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.Drawn.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.Lost.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.GoalsFor.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.GoalsAgainst.ToString(CultureInfo.InvariantCulture)}," +
+            $"{entry.GoalAverage.ToString("0.00", CultureInfo.InvariantCulture)}," +
+            $"{entry.Points.ToString(CultureInfo.InvariantCulture)}");
     }
-}
 
-var matches = matchesFromLines(lines);
-var calculator = new TableCalculator(winPoints: 2, drawPoints: 1);
-var standings = calculator.CalculateStandings(matches);
+    string output = writer.ToString();
 
-if (string.IsNullOrEmpty(outputPath) || outputPath == "-")
-{
-    // write to stdout
-    using var sw = Console.Out;
-    sw.WriteLine("Position,Team,Played,Won,Drawn,Lost,GoalsFor,GoalsAgainst,GoalAverage,Points");
-    int pos = 1;
-    foreach (var s in standings)
+    if (!string.IsNullOrWhiteSpace(outputPath))
     {
-        var gaFormatted = s.GoalAverage.ToString("0.00", CultureInfo.InvariantCulture);
-        sw.WriteLine($"{pos},{Escape(s.Team)},{s.Played},{s.Wins},{s.Draws},{s.Losses},{s.GoalsFor},{s.GoalsAgainst},{gaFormatted},{s.Points}");
-        pos++;
+        await File.WriteAllTextAsync(outputPath, output);
     }
+    else
+    {
+        Console.Write(output);
+    }
+
+    return 0;
 }
-else
+catch (Exception ex) when (
+    ex is IOException ||
+    ex is UnauthorizedAccessException ||
+    ex is ArgumentException ||
+    ex is FormatException ||
+    ex is InvalidOperationException)
 {
-    Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? ".");
-    StandingsCsvWriter.Write(outputPath, standings);
-    Console.WriteLine($"Standings written to: {outputPath}");
+    Console.Error.WriteLine($"Error: {ex.Message}");
+    return 1;
 }
 
-return 0;
+static string EscapeCsv(string value)
+{
+    if (value.Contains(',') ||
+        value.Contains('"') ||
+        value.Contains('\r') ||
+        value.Contains('\n'))
+    {
+        return "\"" + value.Replace("\"", "\"\"") + "\"";
+    }
 
-static string Escape(string v) => v.Contains(',') ? '"' + v.Replace("\"", "\"\"") + '"' : v;
+    return value;
+}

@@ -24,7 +24,8 @@ internal static class TestRunner
         {
             File.WriteAllLines(temp, new[] { "Home,Away,2,1", "Arsenal,Liverpool,0,3" });
             var parser = new InputParser();
-            var results = parser.ParseFile(temp).ToList();
+            var input = File.ReadAllText(temp);
+            var results = parser.ParseMatches(input).ToList();
             AssertEqual(2, results.Count, "Parser should read two rows");
             AssertEqual("Home", results[0].HomeTeam, "First row home team");
             AssertEqual(2, results[0].HomeGoals, "First row home goals");
@@ -35,18 +36,18 @@ internal static class TestRunner
         {
             var matches = new[]
             {
-                new MatchResult(null, "A", "B", 2, 1),
-                new MatchResult(null, "B", "C", 1, 1),
-                new MatchResult(null, "C", "A", 0, 3),
+                new MatchResult("A", "B", 2, 1),
+                new MatchResult("B", "C", 1, 1),
+                new MatchResult("C", "A", 0, 3),
             };
 
-            var calc = new TableCalculator(2,1);
-            var standings = calc.CalculateStandings(matches);
+            var calc = new TableCalculator();
+            var standings = calc.CalculateTable(matches).ToList();
             var a = standings.First(s => s.Team == "A");
             AssertEqual(2, a.Played, "Team A played");
-            AssertEqual(2, a.Wins, "Team A wins");
-            AssertEqual(0, a.Draws, "Team A draws");
-            AssertEqual(0, a.Losses, "Team A losses");
+            AssertEqual(2, a.Won, "Team A wins");
+            AssertEqual(0, a.Drawn, "Team A draws");
+            AssertEqual(0, a.Lost, "Team A losses");
             AssertEqual(5, a.GoalsFor, "Team A GF");
             AssertEqual(1, a.GoalsAgainst, "Team A GA");
         }
@@ -55,11 +56,11 @@ internal static class TestRunner
         {
             var matches = new[]
             {
-                new MatchResult(null, "A", "B", 1, 0),
-                new MatchResult(null, "C", "D", 2, 1),
+                new MatchResult("A", "B", 1, 0),
+                new MatchResult("C", "D", 2, 1),
             };
-            var calc = new TableCalculator(2,1);
-            var standings = calc.CalculateStandings(matches);
+            var calc = new TableCalculator();
+            var standings = calc.CalculateTable(matches).ToList();
             // C has GAve 2.0, A has GAve = GF when GA==0 -> 1
             AssertEqual("C", standings[0].Team, "Goal average tie-breaker places C before A");
         }
