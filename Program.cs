@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using FootballLeagueTable.Services;
 using FootballLeagueTable.Models;
+using FootballLeagueTable.Cli;
 
 
 // Usage:
@@ -15,8 +16,9 @@ if (args.Length > 2)
     return 1;
 }
 
-string? inputPath = args.Length > 0 ? args[0] : null;
-string? outputPath = args.Length > 1 ? args[1] : null;
+var opts = ArgsParser.Parse(args);
+string? inputPath = opts.InputPath;
+string? outputPath = opts.OutputPath;
 
 try
 {
