@@ -1,0 +1,11 @@
+Position,Team,Played,Won,Drawn,Lost,GoalsFor,GoalsAgainst,GoalAverage,Points
+1,Liverpool,1,1,0,0,3,0,3.00,2
+2,Arsenal,1,1,0,0,2,1,2.00,2
+3,Ipswich Town,1,1,0,0,2,1,2.00,2
+4,Derby County,1,0,1,0,1,1,1.00,1
+5,Everton,1,0,1,0,1,1,1.00,1
+6,Leeds United,1,0,1,0,0,0,0.00,1
+7,Tottenham Hotspur,1,0,1,0,0,0,0.00,1
+8,Manchester United,1,0,0,1,1,2,0.50,0
+9,Sunderland,1,0,0,1,1,2,0.50,0
+10,Stoke City,1,0,0,1,0,3,0.00,0

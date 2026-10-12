@@ -1,0 +1,15 @@
+// These are real historical match results for week 10 of 1974/75 in the format HomeTeam 2-1 AwayTeam. 
+
+Birmingham City 3-1 Arsenal
+Burnley 3-5 West Ham United
+Chelsea 0-1 Wolverhampton Wanderers
+Everton 3-2 Leeds United
+Leicester City 0-1 Coventry City
+Luton Town 3-1 Carlisle United
+Manchester City 1-0 Queens Park Rangers
+Newcastle United 1-0 Ipswich Town
+Sheffield United 1-0 Liverpool
+Stoke City 1-1 Derby County
+Tottenham Hotspur 1-2 Middlesbrough
+
+//reference: https://globalsportsarchive.com/en/soccer/competition/premier-league-2026-2027/80278
