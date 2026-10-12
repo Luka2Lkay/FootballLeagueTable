@@ -1,6 +1,3 @@
 <Solution>
-  <Folder Name="/tests/">
-    <Project Path="tests/FootballLeagueTable.Tests/FootballLeagueTable.Tests.csproj" />
-  </Folder>
   <Project Path="FootballLeagueTable.csproj" />
 </Solution>
