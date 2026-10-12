@@ -8,7 +8,7 @@
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Team name cannot be null, empty, or whitespace.", nameof(name));
 
-            Name = name;
+            Name = name.Trim();
         }
 
         public string Name { get; }
