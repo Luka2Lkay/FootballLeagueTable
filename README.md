@@ -1,20 +1,52 @@
-Football League Table - Command Line Application
+# Football League Table
 
-This repository contains a small command-line application that reads a CSV of match results and computes league standings using the historical English First Division rules (2 points for a win, 1 for a draw). Tie-breakers: points, goal average (GF/GA), goals for, then team name.
+A small .NET console application that calculates football (soccer) league standings from a list of match results. Useful as an exercise or starting point for building a league-table utility.
 
-Usage:
-- dotnet run -- <input.csv> <output.csv>
-- dotnet run -- <input.csv>           (writes CSV to stdout)
-- cat input.csv | dotnet run --       (reads from stdin, writes to stdout)
-- Use '-' as filename to explicitly mean stdin or stdout.
+Features
+- Parse simple plain-text match results (e.g. "HomeTeam 2-1 AwayTeam").
+- Compute league table entries: matches played, wins, draws, losses, goals for/against, goal difference, points.
+- Deterministic ranking by points, then goal difference, then goals scored.
 
-If no arguments are provided the program will read from stdin and write to stdout; sample data is included in FootballLeagueTable/Data/ for convenience.
+Prerequisites
+- .NET 10 SDK (the project targets net10.0)
+- A terminal (PowerShell, cmd, or any shell that can run dotnet)
 
-CSV input format (header optional):
-Date,HomeTeam,AwayTeam,HomeGoals,AwayGoals
+Build and run
+1. Restore and build:
 
-Included files:
-- Data/first_division_1974_75_week10.csv - sample match results (small illustrative dataset)
-- Output/standings_week10_1974_75.csv - standings produced from the sample data
+   dotnet build
 
-Note: The sample match data is illustrative and not an authoritative reproduction of the real 1974/75 results. The program is generic and can be used with historical data provided in the CSV format described above.
+2. Run the application from the project folder:
+
+   dotnet run --project FootballLeagueTable.csproj
+
+Usage
+- Place an input file in the Data/ folder (or point your Program.cs to a different path). Each line must represent one match using this format:
+
+  HomeTeam 2-1 AwayTeam
+
+- Team names may contain spaces. The score must be two integers separated by a hyphen.
+
+Example input (Data/matches.txt):
+
+  Liverpool 3-1 Manchester City
+  Arsenal 2-2 Chelsea
+  Manchester City 0-2 Arsenal
+
+Repository structure
+- Models: domain models (Team, MatchResult, LeagueTableEntry)
+- Services: parser and table calculator implementations
+- Cli: DTO for command-line options
+- Data: seed data files and example input
+
+Running tests
+-------------
+
+This repository includes a small self-contained console-style test runner located at tests/FootballLeagueTable.Tests. It runs a few unit checks and returns a non-zero exit code on failure.
+
+From the repository root you can run the tests with dotnet:
+
+  dotnet build
+  dotnet run --project FootballLeagueTable.Tests
+
+A zero exit code and the message "All tests passed" indicate success. In Visual Studio you can set tests/FootballLeagueTable.Tests as the startup project and run it; console output shows the same results.
