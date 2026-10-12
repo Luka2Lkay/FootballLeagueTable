@@ -10,15 +10,12 @@
 
   <ItemGroup>
     <None Include=".github\COPILOT_INSTRUCTIONS.md" />
-    <None Include="tests\FootballLeagueTable.Tests\FootballLeagueTable.Tests.csproj" />
   </ItemGroup>
   <!-- Exclude test sources located under tests/ from the main project build -->
   <ItemGroup>
     <Compile Remove="tests\**\*.cs" />
     <None Remove="tests\**\*" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="tests\FootballLeagueTable.Tests\Program.cs" />
-  </ItemGroup>
+
 
 </Project>

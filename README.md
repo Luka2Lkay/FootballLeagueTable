@@ -42,11 +42,16 @@ Repository structure
 Running tests
 -------------
 
-This repository includes a small self-contained console-style test runner located at tests/FootballLeagueTable.Tests. It runs a few unit checks and returns a non-zero exit code on failure.
+The repository uses xUnit for unit tests. The test project is tests/FootballLeagueTable.Tests and is included in the solution.
 
 From the repository root you can run the tests with dotnet:
 
-  dotnet build
-  dotnet run --project FootballLeagueTable.Tests
+- Run all tests in the solution:
 
-A zero exit code and the message "All tests passed" indicate success. In Visual Studio you can set tests/FootballLeagueTable.Tests as the startup project and run it; console output shows the same results.
+  dotnet test FootballLeagueTable.slnx
+
+- Or run tests for the test project only:
+
+  dotnet test tests/FootballLeagueTable.Tests/FootballLeagueTable.Tests.csproj
+
+The commands will build the code and run the xUnit tests; a successful run reports all tests passed. In Visual Studio open Test Explorer to run or debug tests interactively.
