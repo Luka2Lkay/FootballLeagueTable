@@ -2,7 +2,7 @@
 
 This repository contains a small, production-oriented command-line application that calculates a football (soccer) league table from match results. The implementation follows the historical rules for the English First Division in 1974/75 (2 points for a win, goal average tie-breaker).
 
-Contents
+## Contents
 - FootballLeagueTable/        : Main application project
 - FootballLeagueTable/Cli/    : CLI DTO and helpers
 - FootballLeagueTable/Models/ : Domain models (MatchResult, Team, LeagueTableEntry)
@@ -10,17 +10,17 @@ Contents
 - FootballLeagueTable/Data/   : Sample input CSVs and example output
 - tests/                      : xUnit test project
 
-Prerequisites
+## Prerequisites
 - .NET 10 SDK (target framework: net10.0)
 - A terminal (PowerShell, Bash, or cmd) or Visual Studio 2026+ for IDE runs
 
-Build
+## Build
 
 From the repository root:
 
-  dotnet build
+  ```dotnet build```
 
-Running the CLI
+## Running the CLI
 
 The command-line application supports three ways to provide input and receive output:
 
@@ -29,7 +29,7 @@ Input and output files: Pass the input CSV filename followed by the output CSV f
 Standard input and standard output (stdin/stdout). The program reads match results from standard input and prints the league table to standard output. This is useful when piping data from another command.
 
 
-Examples
+### Examples
 
 1. Read from an input file and write to an output file
 
@@ -49,7 +49,7 @@ The program reads the CSV content piped into it and prints the resulting league 
 
 The program reads the input file and prints the calculated league table to standard output.
 
-Input format
+### Input format
 
 - The program accepts CSV input (header optional) or simple plain-text lines. Required CSV columns (header optional):
 
@@ -57,7 +57,7 @@ Input format
 
   Example CSV row: Arsenal,Liverpool,2,1
 
-Output format
+### Output format
 
 - The program writes a CSV table with the following columns (GoalAverage formatted with two decimals):
 
@@ -72,13 +72,13 @@ Rules implemented
   3) Goals for (GF) (desc)
   4) Team name (asc)
 
-Tests
+## Tests
 
 This repository uses xUnit for unit tests. The test project is tests/FootballLeagueTable.Tests and is included in the solution.
 
 Run all tests from the repository root:
 
-  dotnet test FootballLeagueTable.slnx
+  ```dotnet test FootballLeagueTable.slnx```
 
 Or run tests for the test project only:
 
@@ -86,7 +86,7 @@ Or run tests for the test project only:
 
 The test suite covers CSV and plain-text parsing, aggregation logic, goal-average tie-break behavior, and CLI argument parsing.
 
-Developer notes
+## Developer notes
 
 - The CLI DTO is defined in FootballLeagueTable/Cli/CliOptions.cs. Arguments are parsed by Cli/ArgsParser.cs and mapped to InputPath/OutputPath (null indicates stdin/stdout; '-' is accepted as explicit stdin/stdout).
 - Parsing is implemented in Services/InputParser.cs and supports both CSV rows and free-form "HomeTeam 2-1 AwayTeam" lines.
