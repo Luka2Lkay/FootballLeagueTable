@@ -16,9 +16,6 @@
     <Compile Remove="tests\**\*.cs" />
     <None Remove="tests\**\*" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ai\" />
-  </ItemGroup>
 
 
 </Project>
