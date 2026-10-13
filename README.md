@@ -33,19 +33,19 @@ Examples
 
 1. Read from an input file and write to an output file
 
-dotnet run --project FootballLeagueTable.csproj -- Data/input_week10_1974_75.csv Data/output_week10_1974_75.csv
+```dotnet run --project FootballLeagueTable.csproj -- Data/input_week10_1974_75.csv Data/output_week10_1974_75.csv```
 
 The program reads the match results from Data/input_week10_1974_75.csv and writes the league table to Data/output_week10_1974_75.csv. The output file is created if it does not exist.
 
 2. Read from standard input and write to standard output
 
-cat Data/input_week10_1974_75.csv | dotnet run --project FootballLeagueTable.csproj
+```cat Data/input_week10_1974_75.csv | dotnet run --project FootballLeagueTable.csproj```
 
 The program reads the CSV content piped into it and prints the resulting league table to the terminal.
 
 3. Read from a file and print the results to the terminal
 
-dotnet run --project FootballLeagueTable.csproj -- Data/input_week10_1974_75.csv
+```dotnet run --project FootballLeagueTable.csproj -- Data/input_week10_1974_75.csv```
 
 The program reads the input file and prints the calculated league table to standard output.
 
@@ -82,7 +82,7 @@ Run all tests from the repository root:
 
 Or run tests for the test project only:
 
-  dotnet test tests/FootballLeagueTable.Tests/FootballLeagueTable.Tests.csproj
+  ```dotnet test tests/FootballLeagueTable.Tests/FootballLeagueTable.Tests.csproj```
 
 The test suite covers CSV and plain-text parsing, aggregation logic, goal-average tie-break behavior, and CLI argument parsing.
 
@@ -91,15 +91,3 @@ Developer notes
 - The CLI DTO is defined in FootballLeagueTable/Cli/CliOptions.cs. Arguments are parsed by Cli/ArgsParser.cs and mapped to InputPath/OutputPath (null indicates stdin/stdout; '-' is accepted as explicit stdin/stdout).
 - Parsing is implemented in Services/InputParser.cs and supports both CSV rows and free-form "HomeTeam 2-1 AwayTeam" lines.
 - Table calculation is implemented in Services/TableCalculator.cs using LeagueTableEntry as the aggregate record type.
-
-Contributing
-
-- Add unit tests for any bug fixes or new features under tests/FootballLeagueTable.Tests and ensure dotnet test passes before opening a PR.
-
-Questions
-
-- If you want the project to accept additional historical tie-break rules, or to load canonical historical fixtures for 1974/75, open an issue or ask for help and I can add loader/adapter code.
-
-License
-
-- No license file included. Add one if you intend to publish.
