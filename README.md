@@ -88,6 +88,6 @@ The test suite covers CSV and plain-text parsing, aggregation logic, goal-averag
 
 ## Developer notes
 
-- The CLI DTO is defined in FootballLeagueTable/Cli/CliOptions.cs. Arguments are parsed by Cli/ArgsParser.cs and mapped to InputPath/OutputPath (null indicates stdin/stdout; '-' is accepted as explicit stdin/stdout).
+- The CLI DTO is defined in FootballLeagueTable/Cli/CliOptions.cs. Arguments are parsed by Cli/ArgsParser.cs and mapped to InputPath/OutputPath (null indicates stdin/stdout).
 - Parsing is implemented in Services/InputParser.cs and supports both CSV rows and free-form "HomeTeam 2-1 AwayTeam" lines.
 - Table calculation is implemented in Services/TableCalculator.cs using LeagueTableEntry as the aggregate record type.
